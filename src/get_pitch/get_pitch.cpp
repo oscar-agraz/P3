@@ -64,6 +64,14 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Preprocess the input signal in order to ease pitch estimation. For instance,
   /// central-clipping or low pass filtering may be used.
+  /// \DONE Center clipping preprocessing
+#if 1
+  for(int i=0; i<(int)x.size(); ++i){
+    if((abs(x[i])*32767)<=250){
+      x[i]=0.0F;
+    }
+  }
+#endif
   
   // Iterate for each frame and save values in f0 vector
   vector<float>::iterator iX;
@@ -76,6 +84,22 @@ int main(int argc, const char *argv[]) {
   /// \TODO
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
   /// or time-warping may be used.
+  /// \DONE Gross error avoider and Median filter
+#if 0
+  for(int i = 0; i<(int)f0.size(); ++i){
+    if(f0[i]>250)
+      f0[i]=f0[i-1];
+  }
+#endif
+
+#if 0
+  int median_win = 3; /// Debe ser impar
+  for(int i = 0; i<(int)f0.size(); i=i+median_win){
+    for(int j = 0; j<median_win; ++j){
+      f0[i+j]=f0[i+(median_win-1)/2];
+    }
+  }
+#endif
 
   // Write f0 contour into the output file
   ofstream os(output_txt);
